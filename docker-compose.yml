@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 8501:8501
+    networks:
+      - influxdb_network
+      - web_network
+
+
+networks:
+  web_network:
+    external: True
+  influxdb_network:
+    external: True
