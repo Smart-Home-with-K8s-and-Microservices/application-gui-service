@@ -85,6 +85,6 @@ else:
                         f"Failed to create room. Reason was \n**{', '.join(str(value) for value in response_data.values())}**")
                 else:
                     st.success(
-                        f"Room with name **\"{response_data['name']}\"** was created.")
+                        f"Room with name **\"{response_data['name']}\"** was created or updated.")
                     time.sleep(3)
                     st.rerun()
