@@ -1,16 +1,20 @@
+import os
 from datetime import datetime
 
 import streamlit as st
 from influxdb_client import InfluxDBClient
 
-ORG = "home_automation"
-BUCKET = "sensor_data_bucket"
-TOKEN = "adminToken123"
+ORG = os.getenv('DOCKER_INFLUXDB_INIT_ORG')
+BUCKET = os.getenv('DOCKER_INFLUXDB_INIT_BUCKET')
+TOKEN = os.getenv('DOCKER_INFLUXDB_INIT_ADMIN_TOKEN')
 
 
 @st.cache_data
 def connect_to_influxdb():
-    return InfluxDBClient(url="http://influxdb:8086", token=TOKEN, org=ORG)
+    return InfluxDBClient(
+        url=f'{os.getenv("DOCKER_INFLUXDB_HOST_TYPE")}://{os.getenv("DOCKER_INFLUXDB_HOST")}:{os.getenv("DOCKER_INFLUXDB_PORT")}',
+        token=TOKEN,
+        org=ORG)
 
 
 client = connect_to_influxdb()
