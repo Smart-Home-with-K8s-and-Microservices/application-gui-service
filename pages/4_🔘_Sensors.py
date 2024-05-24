@@ -1,8 +1,7 @@
 import time
 
 import streamlit as st
-from api import APIManager, fetch_data, update_sensor
-from sensor_card import sensor_card
+from api import APIManager, fetch_data, make_request
 
 st.set_page_config(page_title="Sensors",
                    page_icon="🔌",
@@ -40,7 +39,12 @@ else:
         submitted = st.form_submit_button("Submit changes", type='primary')
 
         if submitted and sensor_name:
-            response_data, response_status = update_sensor(selected_sensor['id'], {"name": sensor_name})
+            response_data, response_status = make_request(
+                        url=APIManager.SENSORS_ENDPOINT,
+                        id=selected_sensor['id'],
+                        data={'name': sensor_name},
+                        method='PATCH')
+            
             if response_status >= 400:
                 st.error(
                     f"Failed to rename sensor. Reason was \n**{', '.join(str(value) for value in response_data.values())}**")

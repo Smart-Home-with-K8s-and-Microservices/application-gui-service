@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-from api import APIManager, fetch_data, update_device, flash_device, get_connected_device
+from api import APIManager, fetch_data, make_request, flash_device, get_connected_device
 
 st.set_page_config(page_title="Devices",
                    page_icon="🔌",
@@ -67,7 +67,11 @@ else:
                 submitted = st.form_submit_button("Submit changes", type='primary')
 
                 if submitted and updated_data:
-                    response = update_device(selected_device['id'], updated_data)
+                    response = make_request(
+                        url=APIManager.DEVICE_ENDPOINT,
+                        id=selected_device['id'],
+                        data=updated_data,
+                        method='PATCH')
                     if response:
                         if new_device_name:
                             st.toast(

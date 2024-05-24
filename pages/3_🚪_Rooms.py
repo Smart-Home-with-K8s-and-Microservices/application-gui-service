@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-from api import fetch_data, create_room, update_room, delete_room, APIManager
+from api import fetch_data, APIManager, make_request
 
 st.set_page_config(page_title="Rooms",
                    page_icon="🚪",
@@ -43,7 +43,7 @@ else:
             room_cont.markdown(f"{selected_room['description']}")
             delete_pressed = room_cont.button('Delete', disabled=(selected_room_name==NEW_ROOM_OPTION))
             if delete_pressed:
-                status = delete_room(selected_room['id'])
+                _, status = make_request(url=APIManager.ROOMS_ENDPOINT, id=selected_room['id'], method='DELETE')
                 if status >= 400:
                     st.toast(f'Failed to delete room {selected_room["name"]}')
                 else:
@@ -70,9 +70,16 @@ else:
 
             if submitted and room_data:
                 if not selected_room:
-                    response_data, response_status = create_room(room_data)
+                    response_data, response_status = make_request(
+                        url=APIManager.ROOMS_ENDPOINT,
+                        data=room_data,
+                        method='POST')
                 else:
-                    response_data, response_status = update_room(selected_room['id'], room_data)
+                    response_data, response_status = make_request(
+                        url=APIManager.ROOMS_ENDPOINT,
+                        id=selected_room['id'],
+                        data=room_data,
+                        method='PATCH')
                 if response_status >= 400:
                     st.error(
                         f"Failed to create room. Reason was \n**{', '.join(str(value) for value in response_data.values())}**")
