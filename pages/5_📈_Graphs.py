@@ -1,6 +1,5 @@
 import streamlit as st
 from api import APIManager, fetch_data
-from sensor_card import sensor_card
 
 st.set_page_config(
     page_title="Analytics",
@@ -8,6 +7,7 @@ st.set_page_config(
     initial_sidebar_state="expanded")
 
 from influxdb import connect_to_influxdb, get_device_data, get_sensor_data
+from sensor_card import sensor_card
 
 st.header('Graphs', divider='rainbow')
 st.markdown(

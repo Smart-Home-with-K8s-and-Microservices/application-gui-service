@@ -8,6 +8,8 @@ st.set_page_config(page_title="Sensors",
                    layout="wide",
                    initial_sidebar_state='expanded')
 
+from sensor_card import sensor_card
+
 st.header('Edit a sensor', divider='rainbow')
 st.markdown('Assign a new name to a sensor.')
 
