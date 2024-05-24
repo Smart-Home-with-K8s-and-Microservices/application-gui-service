@@ -1,8 +1,9 @@
+import os
 import requests
 
 
 class APIManager:
-    BASE_URL = 'http://web:8000/api/'
+    BASE_URL = os.getenv('BACKEND_URL')
     ROOMS_ENDPOINT = BASE_URL + 'rooms/'
     DEVICE_ENDPOINT = BASE_URL + 'devices/'
     SENSORS_ENDPOINT = BASE_URL + 'sensors/'
@@ -43,7 +44,7 @@ def flash_device(id, ssid, password, ip):
     if required_fields_msg:
         return required_fields_msg, 400
 
-    url = 'http://web:8000/api/flash/' + str(id)
+    url = APIManager.BASE_URL + 'flash/' + str(id)
     headers = {'Content-Type': 'application/json'}
     data = {
         "ssid_name": ssid,
@@ -57,8 +58,8 @@ def flash_device(id, ssid, password, ip):
 
 
 def get_connected_device():
-    url = 'http://web:8000/api/serial/'
-    
+    url = APIManager.BASE_URL + 'serial/'
+
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -67,36 +68,6 @@ def get_connected_device():
         data = None
     return data
 
-def update_device(id, data):
-    try:
-        response = requests.patch(f"http://web:8000/api/devices/{id}/", data=data)
-        response.raise_for_status()
-        data = response.json()
-    except Exception:
-        data = None
-    return data
-
-def create_room(data):
-    response = requests.post(f"http://web:8000/api/rooms/", data=data)
-    data = response.json()
-    status = response.status_code
-    return data, status
-
-def update_room(id, data):
-    response = requests.patch(f"http://web:8000/api/rooms/{id}/", data=data)
-    data = response.json()
-    status = response.status_code
-    return data, status
-
-def delete_room(id):
-    response = requests.delete(f"http://web:8000/api/rooms/{id}/")
-    return response.status_code
-
-def update_sensor(id, data):
-    response = requests.patch(f"http://web:8000/api/sensors/{id}/", data=data)
-    data = response.json()
-    status = response.status_code
-    return data, status
 
 def post_data(url, data):
     response = requests.post(url, data=data)
