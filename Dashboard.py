@@ -6,7 +6,6 @@ from streamlit_autorefresh import st_autorefresh
 
 st.set_page_config(
     page_title="IoT Dashboard",
-    page_icon="🏂",
     layout="wide",
     initial_sidebar_state="expanded")
 
